@@ -1,0 +1,302 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/google-map/google-map.html">
+<link rel="import" href="../../bower_components/google-map/google-map-directions.html">
+<link rel="import" href="../../bower_components/gold-email-input/gold-email-input.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
+
+<dom-module id="peregrinos-app">
+  <template>
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Merriweather:700|Satisfy);
+
+      :host {
+        display: block;
+        font-family: 'Satisfy', cursive;
+        box-shadow: 0px 0px 60px #888888;
+        margin: 0px auto;
+        width: 1000px;
+        background: url('/img/old_paper.jpg');
+        padding-bottom: 100px;
+      }
+
+      a:active,
+      a:visited{
+        color: black;
+      }
+
+      google-map {
+        height: 560px;
+      }
+
+      h1{
+        font-family: 'Merriweather', serif;
+        background-color: rgba(224, 213, 191, 0.4);
+        color: rgb(90, 46, 11);
+        text-align: center;
+        padding: 34px;
+        font-size: 55px;
+        font-weight: 700;
+        letter-spacing: -0.05em;
+        box-shadow: 0px 3px 9px #888888;
+      }
+      h1 img{
+        vertical-align: baseline;
+        margin-right: 20px;
+      }
+      p{
+        padding: 65px 80px;
+
+        text-align: center;
+        
+        font-size: 32px;
+        letter-spacing: -0.03em;
+        line-height: 1.3em;
+      }
+      strong{
+        font-weight: 700;
+      }
+      .peregrinos{
+        display: block;
+        text-align: center;
+      }
+      .peregrino{
+        width: 22%;
+        vertical-align: middle;
+        display: inline-block;
+        padding: 30px;
+      }
+
+      .peregrino-pic{
+        width: 100%;
+      }
+
+      gold-email-input{
+        --paper-input-container-color: gray;
+        --paper-input-container-focus-color: #8B4513;
+        --paper-input-container-invalid-color: red;
+        --paper-input-container-input-color: black;
+        --paper-input-container-label:{
+          font-family: 'Satisfy', cursive;
+          font-size: 30px;
+        };
+      }
+
+      paper-button{
+        --paper-button:{
+          font-size: 20px;
+          font-family: 'Merriweather', serif;
+        };
+      }
+
+      @media screen and (max-width: 1000px) {
+        :host {
+          width: 100%;
+        }
+      }
+
+      #concha{
+        width: 55px;
+        height: 55px;
+      }
+
+      @media screen and (max-width: 580px) {
+        .peregrino{
+          width: 45%;
+          vertical-align: middle;
+          display: inline-block;
+          padding: 5px;
+        }
+
+        p{
+          padding: 33px 40px;
+
+          text-align: center;
+          
+          font-size: 24px;
+          letter-spacing: -0.01em;
+          line-height: 0.95em;
+        }
+
+        h1{
+          font-size: 2em;
+        }
+
+        google-map {
+          height: 360px;
+        }
+
+        h1 img{
+          display: block;
+          margin:10px auto;
+        }
+      }
+    </style>
+
+
+    <h1><a title="By Skarabeusz (Own work) [CC-BY-SA-3.0 (http://creativecommons.org/licenses/by-sa/3.0/) or CC BY-SA 2.5-2.0-1.0 (http://creativecommons.org/licenses/by-sa/2.5-2.0-1.0)], via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File%3AMuszla_Jakuba.svg"><img id="concha" width="512" alt="Muszla Jakuba" src="/img/concha.png"/></a>PEREGRINOS TECH</h1>
+    <p>Hastiados del mundo digital, seis jovenes promesas de la computación, abandonan y se embarcan una alocada huida sin retorno.<br><br>
+
+    El pánico cunde en las poblaciones a su paso, por el poder soporífero que tienen sus palabras.<br><br>
+
+    Las autoridades tranquilizan a los afectados, y aclaran que los efectos no son permanentes, recomendando mantenerse alejados.<br><br>
+
+    Recuerden, <strong>do not feed the geeks!</strong></p>
+
+    <div class="peregrinos">
+      <template 
+        is="dom-repeat"
+        items="{{peregrinos}}"
+        as="peregrino">
+          <div class="peregrino">
+            <a href="https://twitter.com/{{peregrino.twitter}}">
+              <img class="peregrino-pic" src="{{peregrino.photo}}">
+            </a><br>
+            <a class="twitter-follow-button"
+              href="https://twitter.com/{{peregrino.twitter}}"
+              data-size="large"
+              data-show-count="false">
+            Follow @{{peregrino.twitter}}</a>
+          <div>
+        </template>
+    </div>
+
+    <p>
+      11 - 14 de Agosto.<br><br>
+      <gold-email-input 
+        label="Tu email" 
+        id="email"
+        on-keydown="_checkAdd"
+        auto-validate 
+        required></gold-email-input>
+      <paper-button 
+        on-tap="_addEmail">
+        Quiero redimir mis pecados digitales
+      </paper-button>
+    </p>
+
+    <google-map
+      map="{{map}}"
+      latitude="42.7964621" 
+      longitude="-8.1388204"
+      api-key="{{mapsApiKey}}"
+      zoom="8"
+      disable-zoom>
+    </google-map>
+
+  
+    <google-map-directions 
+      map="{{map}}"
+      start-address="Tui"
+      end-address="Santiago de Compostela"
+      api-key="{{mapsApiKey}}"
+      travel-mode="WALKING">
+    </google-map-directions>
+
+    <p>
+      <a class="twitter-share-button"
+        href="https://twitter.com/intent/tweet?text=Acompaña a estos hastiados del mundo digital en su aventura más analógica #PeregrinosTech"
+        data-size="large">
+      Tweet</a>
+    </p>
+
+    <iron-localstorage 
+      name="peregrinos-tech"
+      on-iron-localstorage-load="_backupLoaded"
+      value="{{backedUpPilgrims}}">
+    </iron-localstorage>
+
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'peregrinos-app',
+      properties: {
+        peregrinos:{
+          type:Array,
+          value: function(){
+            return [
+            ];
+          }
+        },
+        loaded: {
+          type: Boolean,
+          value: false
+        },
+        mapsApiKey:{
+          type:String,
+          value:"AIzaSyBrvQTVvlRpw_hmjYiSn49fRU9m7kNZdA8"
+        }
+
+      },
+      ready: function(){
+        window.fireDatabase = firebase.initializeApp({
+          apiKey: "AIzaSyBrvQTVvlRpw_hmjYiSn49fRU9m7kNZdA8",
+          authDomain: "peregrino-tech.firebaseapp.com",
+          databaseURL: "https://peregrino-tech.firebaseio.com",
+          storageBucket: "peregrino-tech.appspot.com",
+        }).database();
+
+        window.fireDatabase.ref('/peregrinos/').once('value').then(
+          function(snapshot) {
+            this._loadTwitter();
+            this.peregrinos = [];
+            snapshot.val().forEach(function(pilgrim){
+              this.push('peregrinos', pilgrim);
+            }, this);
+            this.backedUpPilgrims = this.peregrinos;
+            this.loaded = true;
+          }.bind(this)
+        )
+
+      },
+      _backupLoaded: function(){
+        if (!this.loaded){
+          this.peregrinos = this.backedUpPilgrims.slice();
+        }
+      },
+      _loadTwitter: function(){
+        window.twttr = (function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0],
+            t = window.twttr || {};
+          if (d.getElementById(id)) return t;
+          js = d.createElement(s);
+          js.id = id;
+          js.src = "https://platform.twitter.com/widgets.js";
+          fjs.parentNode.insertBefore(js, fjs);
+         
+          t._e = [];
+          t.ready = function(f) {
+            t._e.push(f);
+          };
+          return t;
+        }(document, "script", "twitter-wjs"));
+      },
+      _updatePilgrims: function(peregrinos){
+        for (let i = peregrinos.length - 1; i >= 0; i--) {
+          this.push('peregrinos', peregrinos[i]);
+        }
+      },
+      _addEmail: function(){
+        if(window.fireDatabase){
+          var input = this.$.email;
+          if(input.value !==''&& input.validate()){
+            var emailAdress = input.value;
+            window.fireDatabase.ref('emails').push(emailAdress);
+            input.value = undefined;
+            alert(['¡Gracias! Te avisaremos a ', emailAdress, ' si tenemos novedades.'].join(''));
+          } else {
+            alert("Debe introducir una dirección de email...");
+          }
+        }
+      },
+      _checkAdd: function(e) {
+        if (e.keyCode === 13) {
+          this._addEmail();
+        }
+      }
+
+    });
+  </script>
+</dom-module>
