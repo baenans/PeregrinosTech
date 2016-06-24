@@ -1,0 +1,53 @@
+<!--
+An element to represent a Peregrino
+
+Example:
+
+    <peregrino-el 
+      peregrino="{{peregrino}}">
+    </peregrino-el>
+
+@demo demo/index.html
+-->
+
+<dom-module id="peregrino-el">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+      }
+      .peregrino-pic{
+        width: 100%;
+      }
+    </style>
+    <a href="https://twitter.com/{{peregrino.twitter}}">
+      <img 
+        class="peregrino-pic" 
+        src="{{peregrino.img.url}}"
+        alt="{{peregrino.img.alt}}"
+        title="{{peregrino.img.title}}">
+    </a><br>
+    <a class="twitter-follow-button"
+      href="https://twitter.com/{{peregrino.twitter}}"
+      data-size="large"
+      data-show-count="false">
+    Follow @{{peregrino.twitter}}</a>
+  </template>
+  <script>
+    Polymer({
+      is: 'peregrino-el',
+      properties:{
+        peregrino:{
+          type:Object,
+          value: function(){
+            return {
+              'src':'Loading',
+              'title':'Loading',
+              'url':''
+            }
+          }
+        }
+      }
+    });
+  </script>
+</dom-module>

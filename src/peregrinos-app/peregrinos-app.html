@@ -4,6 +4,7 @@
 <link rel="import" href="../../bower_components/gold-email-input/gold-email-input.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="./peregrino-el.html">
 
 <dom-module id="peregrinos-app">
   <template>
@@ -60,15 +61,10 @@
         display: block;
         text-align: center;
       }
-      .peregrino{
+      peregrino-el{
         width: 22%;
         vertical-align: middle;
-        display: inline-block;
         padding: 30px;
-      }
-
-      .peregrino-pic{
-        width: 100%;
       }
 
       gold-email-input{
@@ -101,10 +97,9 @@
       }
 
       @media screen and (max-width: 580px) {
-        .peregrino{
+        peregrino-el{
           width: 45%;
-          vertical-align: middle;
-          display: inline-block;
+
           padding: 5px;
         }
 
@@ -148,16 +143,9 @@
         is="dom-repeat"
         items="{{peregrinos}}"
         as="peregrino">
-          <div class="peregrino">
-            <a href="https://twitter.com/{{peregrino.twitter}}">
-              <img class="peregrino-pic" src="{{peregrino.photo}}">
-            </a><br>
-            <a class="twitter-follow-button"
-              href="https://twitter.com/{{peregrino.twitter}}"
-              data-size="large"
-              data-show-count="false">
-            Follow @{{peregrino.twitter}}</a>
-          <div>
+          <peregrino-el
+            peregrino="{{peregrino}}">
+          </peregrino-el>
         </template>
     </div>
 
